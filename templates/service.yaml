@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "mc-server-%s-svc" .Values.mcVersion}}
+  labels:
+    app: mc-server
+    mcversion: {{ .Values.mcVersion }}
+spec:
+  type: LoadBalancer
+  ports:
+    {{- if eq .Values.mcVersion "bedrock" }}
+      - port: 19132
+        targetPort: {{ printf "mc-%s-port" .Values.mcVersion}}
+        protocol: UDP
+        name: {{ printf "mc-%s-port-ext" .Values.mcVersion}}
+    {{- end }}
+    {{- if eq .Values.mcVersion "java" }}
+      - port: 25565
+        targetPort: {{ printf "mc-%s-port" .Values.mcVersion}}
+        protocol: TCP
+        name: {{ printf "mc-%s-port-ext" .Values.mcVersion}}
+    {{- end }}
+  selector:
+    app: mc-server
+    mcversion: {{ .Values.mcVersion }}

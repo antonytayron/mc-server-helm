@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "mc-%s-config" .Values.mcVersion}}
+data:
+  EULA: "True"
+{{- range $key, $value := .Values.server_config }}
+  {{ $key }}: "{{ $value }}"
+{{- end }}

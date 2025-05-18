@@ -1,0 +1,16 @@
+mcVersion: bedrock #java
+
+server_config:
+  SERVER_NAME: My-server
+  SERVER_PORT: 19132 #25565 for java, 19132 for Bedrock
+  GAMEMODE: creative #survival, creative, adventure, spectator
+  DIFFICULTY: peaceful #peaceful,easy,normal,hard
+  MAX_PLAYERS: 10
+  ONLINE_MODE: True #By default, server checks connecting players against Minecraft's account database. If you want to create an offline server or your server is not connected to the internet, you can disable the server to try connecting to minecraft.net to authenticate players
+  MOTD: "hello"
+
+resources:
+  cpu_max: "1000m"
+  mem_max: "1000Mi"
+  storage_size: "1Gi"
+  storage_path: "/data/mc-server-data"

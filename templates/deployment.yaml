@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "mc-%s-server" .Values.mcVersion}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mc-server
+      mcversion: {{ .Values.mcVersion }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mc-server
+        mcversion: {{ .Values.mcVersion }}
+    spec:
+      containers:
+        - name: "mc-server"
+          {{- if eq .Values.mcVersion "bedrock" }}
+          image: itzg/minecraft-bedrock-server:latest
+          {{- end}}
+          {{- if eq .Values.mcVersion "java" }}
+          image: itzg/minecraft-server:latest
+          {{- end }}
+          ports:
+            {{- if eq .Values.mcVersion "bedrock" }}
+            - name: {{ printf "mc-%s-port" .Values.mcVersion}}
+              containerPort: 19132
+              protocol: UDP
+              {{- end}}
+              {{- if eq .Values.mcVersion "java" }}
+            - name: {{ printf "mc-%s-port" .Values.mcVersion}}
+              containerPort: 25565
+              protocol: TCP
+              {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ printf "mc-%s-config" .Values.mcVersion}}
+                optional: false
+          resources:
+            limits:
+              cpu: {{ .Values.resources.cpu_max}}
+              memory: {{ .Values.resources.men_max}}
+          volumeMounts:
+            - name: mc-storage
+              mountPath: /data
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/worker
+                    operator: In
+                    values:
+                      - worker
+      volumes:
+        - name: mc-storage
+          persistentVolumeClaim:
+            claimName: {{ printf "mc-%s-pvc" .Values.mcVersion}}

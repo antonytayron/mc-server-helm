@@ -1,0 +1,3 @@
+
+The Minecraft server has been deployed on namespace: {{ .Release.Namespace }}
+External port is: {{- if eq .Values.mcVersion "java" }} 25565 {{- end}} {{- if eq .Values.mcVersion "bedrock" }} 19132 {{- end}}
