@@ -9,13 +9,13 @@ spec:
   type: LoadBalancer
   ports:
     {{- if eq .Values.mcVersion "bedrock" }}
-      - port: 19132
+      - port: {{ .Values.server_config.EXTERNAL_SERVER_PORT }}
         targetPort: {{ printf "mc-%s-port" .Values.mcVersion}}
         protocol: UDP
         name: {{ printf "mc-%s-port-ext" .Values.mcVersion}}
     {{- end }}
     {{- if eq .Values.mcVersion "java" }}
-      - port: 25565
+      - port: {{ .Values.server_config.EXTERNAL_SERVER_PORT }}
         targetPort: {{ printf "mc-%s-port" .Values.mcVersion}}
         protocol: TCP
         name: {{ printf "mc-%s-port-ext" .Values.mcVersion}}
