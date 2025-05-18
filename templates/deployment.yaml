@@ -42,7 +42,7 @@ spec:
           resources:
             limits:
               cpu: {{ .Values.resources.cpu_max}}
-              memory: {{ .Values.resources.men_max}}
+              memory: {{ .Values.resources.mem_max}}
           volumeMounts:
             - name: mc-storage
               mountPath: /data
